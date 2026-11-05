@@ -1,0 +1,304 @@
+import numpy as np
+import pandas as pd
+
+students = pd.DataFrame(columns=["Name", "Class", "Section"])
+teachers = pd.DataFrame(columns=["Name", "Subject"])
+classes = pd.DataFrame(columns=["Section", "Class Teacher", "Subjects"])
+attendance = pd.DataFrame(columns=["Total Days", "Present Days"])
+marks = pd.DataFrame(columns=["English", "Maths", "Science"])
+fees = pd.DataFrame(columns=["Total Fee", "Paid Fee", "Pending Fee"])
+library = pd.DataFrame(columns=["Roll", "Book"])
+issue_id = 1
+
+while True:
+    print("=====================================")
+    print("       SCHOOL MANAGEMENT SYSTEM")
+    print("=====================================")
+    print("1. Student Management")
+    print("2. Teacher Management")
+    print("3. Attendance Management")
+    print("4. Marks & Result")
+    print("5. Fee Management")
+    print("6. Library Management")
+    print("7. Search Student")
+    print("8. Exit")
+    print("=====================================")
+    ch = int(input("Enter your choice: "))
+
+    if ch == 1:
+        while True:
+            print("1. Add student")
+            print("2. View student details")
+            print("3. Search student")
+            print("4. Update student details")
+            print("5. Delete student")
+            print("6. Back")
+            sub = int(input("Enter choice: "))
+
+            if sub == 1:
+                roll = int(input("Enter roll number: "))
+                name = input("Enter name: ")
+                cls = input("Enter class: ")
+                sec = input("Enter section: ")
+                students.loc[roll] = [name, cls, sec]
+                print("Student added")
+
+            elif sub == 2:
+                if students.empty:
+                    print("No records found")
+                else:
+                    print(students)
+
+            elif sub == 3:
+                roll = int(input("Enter roll number to search: "))
+                if roll in students.index:
+                    print(students.loc[roll])
+                else:
+                    print("Student not found")
+
+            elif sub == 4:
+                roll = int(input("Enter roll number to update: "))
+                if roll in students.index:
+                    name = input("Enter new name: ")
+                    cls = input("Enter new class: ")
+                    sec = input("Enter new section: ")
+                    students.loc[roll] = [name, cls, sec]
+                    print("Student updated")
+                else:
+                    print("Student not found")
+
+            elif sub == 5:
+                roll = int(input("Enter roll number to delete: "))
+                if roll in students.index:
+                    students = students.drop(roll)
+                    print("Student deleted")
+                else:
+                    print("Student not found")
+
+            elif sub == 6:
+                break
+            else:
+                print("Invalid choice")
+
+    elif ch == 2:
+        while True:
+            print("1. Add teacher")
+            print("2. View teacher details")
+            print("3. Search teacher")
+            print("4. Add class and subject allocation")
+            print("5. View class details")
+            print("6. Back")
+            sub = int(input("Enter choice: "))
+
+            if sub == 1:
+                tid = int(input("Enter teacher ID: "))
+                tname = input("Enter teacher name: ")
+                sub_name = input("Enter subject: ")
+                teachers.loc[tid] = [tname, sub_name]
+                print("Teacher added")
+
+            elif sub == 2:
+                if teachers.empty:
+                    print("No records found")
+                else:
+                    print(teachers)
+
+            elif sub == 3:
+                tid = int(input("Enter teacher ID to search: "))
+                if tid in teachers.index:
+                    print(teachers.loc[tid])
+                else:
+                    print("Teacher not found")
+
+            elif sub == 4:
+                cname = input("Enter class name: ")
+                csec = input("Enter section: ")
+                ct = input("Enter class teacher name: ")
+                subs = input("Enter subjects allocated: ")
+                classes.loc[cname] = [csec, ct, subs]
+                print("Class details saved")
+
+            elif sub == 5:
+                if classes.empty:
+                    print("No class records found")
+                else:
+                    print(classes)
+
+            elif sub == 6:
+                break
+            else:
+                print("Invalid choice")
+
+    elif ch == 3:
+        while True:
+            print("1. Mark attendance")
+            print("2. View attendance")
+            print("3. Calculate attendance percentage")
+            print("4. Back")
+            sub = int(input("Enter choice: "))
+
+            if sub == 1:
+                roll = int(input("Enter roll number: "))
+                total_d = int(input("Enter total working days: "))
+                pres_d = int(input("Enter days present: "))
+                attendance.loc[roll] = [total_d, pres_d]
+                print("Attendance recorded")
+
+            elif sub == 2:
+                if attendance.empty:
+                    print("No attendance records")
+                else:
+                    print(attendance)
+
+            elif sub == 3:
+                roll = int(input("Enter roll number: "))
+                if roll in attendance.index:
+                    td = attendance.loc[roll, "Total Days"]
+                    pd_days = attendance.loc[roll, "Present Days"]
+                    per = (pd_days / td) * 100
+                    print("Roll:", roll, "Attendance Percentage:", per)
+                else:
+                    print("Record not found")
+
+            elif sub == 4:
+                break
+            else:
+                print("Invalid choice")
+
+    elif ch == 4:
+        while True:
+            print("1. Enter subject-wise marks")
+            print("2. Calculate total and percentage")
+            print("3. Display grade and result")
+            print("4. Back")
+            sub = int(input("Enter choice: "))
+
+            if sub == 1:
+                roll = int(input("Enter roll number: "))
+                m1 = float(input("Enter English marks: "))
+                m2 = float(input("Enter Maths marks: "))
+                m3 = float(input("Enter Science marks: "))
+                marks.loc[roll] = [m1, m2, m3]
+                print("Marks entered")
+
+            elif sub == 2:
+                roll = int(input("Enter roll number: "))
+                if roll in marks.index:
+                    arr = np.array(marks.loc[roll])
+                    tot = np.sum(arr)
+                    per = np.mean(arr)
+                    print("Roll:", roll, "Total:", tot, "Percentage:", per)
+                else:
+                    print("Marks not found")
+
+            elif sub == 3:
+                roll = int(input("Enter roll number: "))
+                if roll in marks.index:
+                    arr = np.array(marks.loc[roll])
+                    tot = np.sum(arr)
+                    per = np.mean(arr)
+                    if per >= 90:
+                        grade = "A"
+                        res = "Pass"
+                    elif per >= 75:
+                        grade = "B"
+                        res = "Pass"
+                    elif per >= 50:
+                        grade = "C"
+                        res = "Pass"
+                    elif per >= 33:
+                        grade = "D"
+                        res = "Pass"
+                    else:
+                        grade = "E"
+                        res = "Fail"
+                    print("Roll:", roll, "Total:", tot, "Percentage:", per, "Grade:", grade, "Result:", res)
+                else:
+                    print("Marks not found")
+
+            elif sub == 4:
+                break
+            else:
+                print("Invalid choice")
+
+    elif ch == 5:
+        while True:
+            print("1. Enter fee details")
+            print("2. Check paid and pending fees")
+            print("3. Generate fee summary")
+            print("4. Back")
+            sub = int(input("Enter choice: "))
+
+            if sub == 1:
+                roll = int(input("Enter roll number: "))
+                tfee = int(input("Enter total fee: "))
+                pfee = int(input("Enter paid fee: "))
+                dues = tfee - pfee
+                fees.loc[roll] = [tfee, pfee, dues]
+                print("Fee details saved")
+
+            elif sub == 2:
+                roll = int(input("Enter roll number: "))
+                if roll in fees.index:
+                    print("Roll:", roll, "Paid Fee:", fees.loc[roll, "Paid Fee"], "Pending Fee:", fees.loc[roll, "Pending Fee"])
+                else:
+                    print("Record not found")
+
+            elif sub == 3:
+                if fees.empty:
+                    print("No fee records")
+                else:
+                    print(fees)
+
+            elif sub == 4:
+                break
+            else:
+                print("Invalid choice")
+
+    elif ch == 6:
+        while True:
+            print("1. Issue book")
+            print("2. Return book")
+            print("3. View issued books")
+            print("4. Back")
+            sub = int(input("Enter choice: "))
+
+            if sub == 1:
+                roll = int(input("Enter student roll number: "))
+                bname = input("Enter book name: ")
+                library.loc[issue_id] = [roll, bname]
+                print("Book issued with Issue ID:", issue_id)
+                issue_id = issue_id + 1
+
+            elif sub == 2:
+                iid = int(input("Enter Issue ID to return: "))
+                if iid in library.index:
+                    library = library.drop(iid)
+                    print("Book returned")
+                else:
+                    print("Record not found")
+
+            elif sub == 3:
+                if library.empty:
+                    print("No books issued")
+                else:
+                    print(library)
+
+            elif sub == 4:
+                break
+            else:
+                print("Invalid choice")
+
+    elif ch == 7:
+        roll = int(input("Enter roll number to search: "))
+        if roll in students.index:
+            print(students.loc[roll])
+        else:
+            print("Student not found")
+
+    elif ch == 8:
+        print("Thank you")
+        break
+
+    else:
+        print("Invalid choice")
